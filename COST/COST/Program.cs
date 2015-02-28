@@ -288,11 +288,11 @@ namespace COST
                 });
 
                 Console.WriteLine("{0}\tHilbert regions sized", stopwatch.Elapsed);
-                for (int i = 1; i < counts.Length; i++)
+                for (int i = 0; i < counts.Length - 1; i++)
                     counts[i + 1] += counts[i];
 
                 for (int i = counts.Length - 1; i > 0; i--)
-                    counts[i] = counts[i] - 1;
+                    counts[i] = counts[i - 1];
 
                 counts[0] = 0;
 
@@ -301,11 +301,6 @@ namespace COST
                     for (int i = offset; i < offset + length; i++)
                         hilbertTransformed[counts[array[i].Index]++] = array[i].Value;
                 });
-
-                for (int i = counts.Length - 1; i > 0; i--)
-                    counts[i] = counts[i] - 1;
-
-                counts[0] = 0;
 
                 var buffer = new BufferTrie<uint>.Pair[5000000];
 
@@ -322,6 +317,11 @@ namespace COST
                 });
 
                 Trie.Flush();
+
+                for (int i = counts.Length - 1; i > 0; i--)
+                    counts[i] = counts[i - 1];
+                
+                counts[0] = 0;
 
                 Console.WriteLine("{0}\tEdges partitioned", stopwatch.Elapsed);
 
